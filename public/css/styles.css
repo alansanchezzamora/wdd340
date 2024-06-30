@@ -52,12 +52,51 @@ body {
   border-left: 6px solid #01b0d3;
   border-right: 6px solid #01b0d3;
 }
+#navbar ul {
+  display: contents;
+}
 #navbar a {
   color: white;
   text-decoration: none;
 }
+/*************Error Page*******************/
+#error {
+  background-color: whitesmoke;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+  margin: 0 auto;
+  width: 80%;
+}
 
+#error p {
+  text-align: center;
+  margin: 0 auto;
+}
+#error img {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+}
 /******************** Index ******************/
+#inv-display {
+  background-color: whitesmoke;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 80%;
+  margin: 0 auto;
+  list-style-type: none;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+}
+main h1 {
+  background-color: aliceblue;
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+}
+
 #home {
   display: flex;
   flex-direction: column;
@@ -152,11 +191,11 @@ li a:hover {
 #reviews li {
   margin-bottom: 15px;
 }
-#reviews{
+#reviews {
   grid-column: 2/3;
   grid-row: 1/2;
 }
-#upgrades-grid{
+#upgrades-grid {
   grid-column: 1/2;
   grid-row: 1/2;
 }
@@ -179,10 +218,13 @@ footer {
     display: block;
   }
 
-  footer, #top-header, #home, #navbar{
+  footer,
+  #top-header,
+  #home,
+  #navbar {
     width: 100%;
   }
-  header{
+  header {
     width: 100%;
   }
 
@@ -192,7 +234,7 @@ footer {
     grid-column: 1 / 15;
     grid-row: 1/6;
   }
-  #hero div{
+  #hero div {
     grid-column: 2/6;
     grid-row: 1/5;
   }
