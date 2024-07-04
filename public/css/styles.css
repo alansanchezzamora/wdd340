@@ -77,6 +77,22 @@ body {
   width: 80%;
   margin: 0 auto;
 }
+/***************** Details *******************/
+#details-card {
+  background-color: ghostwhite;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 auto;
+  max-width: 80%;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+}
+
+#details-card img {
+  width: 100%;
+  padding: 15px;
+}
+
 /******************** Index ******************/
 #inv-display {
   background-color: whitesmoke;
@@ -238,4 +254,37 @@ footer {
     grid-column: 2/6;
     grid-row: 1/5;
   }
+
+/*************** Inventory *****************/
+#inv-display {
+display: block;
+width: 100%;
+
+}
+
+  /************* Details Mobile ****************/
+  #details-card {
+    max-width: 100%;
+    display: block;
+    padding-bottom: 1px;
+  }
+  main h1{
+    width: 100%;
+  }
+  main ul{
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    padding: 0;
+  }
+
+  main ul li{
+    margin: 0 10px;
+    border: 1px solid black; /* Adds border around each li */
+    padding: 10px; /* Adds padding inside the border */
+    border-radius: 5%;
+    margin-bottom: 10px;
+
+  }
+
 }

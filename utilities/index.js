@@ -78,3 +78,40 @@ Util.buildClassificationGrid = async function (data) {
   }
   return grid;
 };
+
+/* **************************************
+ * Build the details view HTML
+ * ************************************ */
+Util.buildDetailsCard = async function (data) {
+  // Initialize the card variable as an empty string
+  let card = '';
+
+  // Extract data properties
+  const make = data.inv_make;
+  const model = data.inv_model;
+  const description = data.inv_description;
+  const car_image = data.inv_image;
+  const price = data.inv_price;
+  const miles = data.inv_miles;
+  const color = data.inv_color;
+
+  // Build the card HTML
+  card += `<div id="details-card"> <div id="details-img"><img src="${car_image}" alt="Image of ${make} ${model} on CSE Motors" /></div>`;
+  card += `<div id="details_desc"><h2>${make} ${model} Details</h2>`;
+  card += `<h3>Price: $${new Intl.NumberFormat("en-US").format(price)}</h3>`;
+  card += `<h3>Description: ${description}</h3>`;
+  card += `<h3>Color: ${color}</h3>`;
+  card += `<h3>Miles: ${new Intl.NumberFormat("en-US").format(miles)}</h3></div></div>`;
+
+  // Return the constructed card
+  return card;
+};
+
+
+/**
+ * Middleware For Handling Errors
+ * Wrap Other functions in this for
+ * General Error Handling
+ * Unit 3, Activities
+ */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
