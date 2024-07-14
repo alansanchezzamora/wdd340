@@ -115,3 +115,8 @@ Util.buildDetailsCard = async function (data) {
  * Unit 3, Activities
  */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+//Promise.resolve accepts a function as a parameter 
+//which is why it is considered a higher order function
+//If there's an error and the promise fails, the catch.() method picks up the error
+// and passes it to the next step in the process.
+// that next step will be the Express Error Handler

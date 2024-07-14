@@ -17,6 +17,7 @@ const utilities = require("./utilities");
 const session = require("express-session");
 const pool = require("./database/");
 const { name } = require("ejs");
+const bodyParser = require("body-parser");
 
 /* *****************************
  *        Middleware
@@ -41,6 +42,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+// Body Parser 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 /* ***********************
  *       Routes
 
@@ -61,6 +66,8 @@ app.use("/inv", utilities.handleErrors(inventoryRoute));
 app.use("/account", utilities.handleErrors(accountRoute));
 
 // File Not Found Route - must be last route in list
+//Place after all routes
+//Unit 3, Basic Error Handling Activity
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." });
 });

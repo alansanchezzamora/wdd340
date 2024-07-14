@@ -16,4 +16,8 @@ router.get(
   utilities.handleErrors(invController.buildDetailsPage)
 );
 
+router.get(
+  "/detail/505Error",
+  utilities.handleErrors(invController.buildDetailsPage)
+);
 module.exports = router;
