@@ -9,7 +9,22 @@ body {
   background-image: url("../images/site/checkerboard.jpg");
   font-family: "Courier New", Courier, monospace;
 }
+/******************** Add Inventory ******************/
+#inv-form {
+  background: whitesmoke;
+  max-width: 80%;
+  margin: 0 auto;
+  display: block;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
 
+label, button{
+  display: block;
+  padding: 5px;
+}
 /***************** Login and Register *************/
 #loginForm, #registerContainer{
   width: 80%;
@@ -21,6 +36,16 @@ body {
   border-top-right-radius: 10px;
 }
 
+.notice{
+  width: 80%;
+  margin: 0 auto;
+  background-color: whitesmoke;
+  border-left: 6px solid #01b0d3;
+  border-right: 6px solid #01b0d3;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: red;
+}
 
 /***************** Header *****************/
 #top-header {

@@ -8,8 +8,6 @@ const utilities = require("../utilities");
 const accountController = require("../controllers/accountController");
 const regValidate = require("../utilities/account-validation");
 
-//Route to account login view
-router.get("/login", utilities.handleErrors(accountController.buildLogin));
 
 //Deliver Registration View
 // Unit 4, deliver registration view activity
@@ -19,12 +17,25 @@ router.get(
 );
 
 //Post regitration form
-// Unit 4
+// Process the registration data
 router.post(
   "/register",
   regValidate.registationRules(),
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
+)
+
+//Route to account login view
+router.get("/login", utilities.handleErrors(accountController.buildLogin));
+
+
+//Post Login form
+// Unit 4
+// Blocks login if there isn't a proper email or password
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
 );
 
 // Process the login attempt

@@ -1,21 +1,41 @@
-<h1>
-    <%= title %>
-</h1>
+<% if (title) { %>
+    <h1 class="title">
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
 
 <%- messages() %>
-    <div id="loginForm">
-        <form action="/account/login" method="post">
-            <div>
-                <label for="email">Email: </label>
-                <input type="email" id="email" name="account_email" required value="<%= locals.account_email %>">
-                </div>
-                <div>
-                    <label for="password">Password: </label>
-                <input type="password" name="account_password" id="password"
-                    pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <% if (!error.msg.startsWith('Invalid value')) { %>
+                <li><%- error.msg %></li>
+                <% } %>
+                    <% }) %>
+    </ul>
+    <% } %>
 
-            </div>
-            <button type="submit">Submit</button>
-            </form>
-        <h2>No account? <a href="/account/register">Sign-up</a></h2>
-        </div>
+
+        <div id="login-container">
+            <form class="login-form forms" id="loginForm" action="/account/login" method="post">
+                <div class="email-input field">
+                    <label for="email">Email:
+                        <input type="email" id="email" name="account_email" placeholder="" required
+                            value="<%= locals.account_email %>">
+                    </label>
+                </div>
+                <div class="password-input field" id="pwContainer">
+                    <label for="pw_input">Password:
+                        <input type="password" name="account_password" id="pw_input"
+                            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+                    </label>
+                    </div>
+                <button class="login-button buttons" type="submit">Login</button>
+                <div id="signup">
+                    <span>No Account?</span>
+                    <a id="signup-link" href="/account/register">Sign Up</a>
+                </div>
+                
+                </form>
+</div>

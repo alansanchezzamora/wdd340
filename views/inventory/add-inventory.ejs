@@ -1,0 +1,66 @@
+<% if (title) { %>
+    <h1 class="title">
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <%- messages() %>
+
+
+
+            <form id="inv-form" action="/inv/add-inventory" method="POST">
+
+                <label for="classification_id">Classification
+                    <%- classificationOptions %>
+                </label>
+
+                <label for="inv_make">Make:</label>
+                <input type="text" id="inv_make" name="inv_make" placeholder="Min of 3 characters"
+                    value="<%= locals.inv_make %>" required>
+                </label>
+
+                <label for="inv_model">Model:</label>
+                <input type="text" id="inv_model" name="inv_model" placeholder="Min of 3 characters"
+                    value="<%= locals.inv_model %>" required>
+                </label>
+
+
+
+                <label for="inv_description">Description:</label>
+                <input type="text" id="inv_description" name="inv_description" required
+                    value="<%= locals.inv_description %>" placeholder="">
+                </label>
+
+                <label for="inv_image">Image Path:</label>
+                <input type="text" id="inv_image" name="inv_image" value="<%= locals.inv_image %>" required
+                    placeholder="">
+                </label>
+
+                <label for="inv_thumbnail">Thumbnail URL:</label>
+                <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= locals.inv_thumbnail %>" required
+                    placeholder="">
+                </label>
+
+                <label for="inv_price">Price:</label>
+                <input type="number" id="inv_price" name="inv_price" value="<%= locals.inv_price %>" required
+                    placeholder="decimal or integer">
+                </label>
+
+                <label for="inv_year">Year:</label>
+                <input type="text" id="inv_year" name="inv_year" value="<%= locals.inv_year %>"
+                    placeholder="4-digit year" required>
+                </label>
+
+                <label for="inv_miles">Miles:</label>
+                <input type="number" id="inv_miles" name="inv_miles" value="<%= locals.inv_miles %>" required
+                    placeholder="digits only">
+                </label>
+
+                <label for="inv_color">Color:</label>
+                <input type="text" id="inv_color" name="inv_color" value="<%= locals.inv_color %>" required
+                    placeholder="">
+                </label>
+
+
+                <button class="register-button button" type="submit">Register</button>
+            </form>

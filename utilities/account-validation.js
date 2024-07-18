@@ -77,30 +77,30 @@ validate.checkRegData = async (req, res, next) => {
   }
   next();
 };
-
 /* ************************************
  *             Login Rules
  * *********************************** */
 validate.loginRules = () => {
   return [
-    // valid email is required and cannot already exist in the DB
     body("account_email")
       .trim()
       .escape()
       .notEmpty()
       .isEmail()
-      .normalizeEmail() // refer to validator.js docs
+      .normalizeEmail()
       .withMessage("A valid email is required.")
       .custom(async (account_email) => {
         const emailExists = await accountModel.checkExistingEmail(
           account_email
         );
         if (!emailExists) {
-          throw new Error("Enter a valid email.");
+          //if it
+          throw new Error(
+            "Email does not exist.  Please register or use different email"
+          );
         }
       }),
 
-    // password is required and must be strong password
     body("account_password")
       .trim()
       .notEmpty()
@@ -111,9 +111,10 @@ validate.loginRules = () => {
         minNumbers: 1,
         minSymbols: 1,
       })
-      .withMessage("Incorrect Password."),
+      .withMessage("Password does not meet requirements."),
   ];
 };
+
 /* ******************************
  * Check data and return errors or continue to login
  * ***************************** */
@@ -128,6 +129,177 @@ validate.checkLoginData = async (req, res, next) => {
       title: "Login",
       nav,
       account_email,
+    });
+    return;
+  }
+  next();
+};
+
+/* *******************************************
+ * ADD A NEW CATEGORY - W4 HOMEWORK
+ ******************************************** */
+
+/* ********************************
+ *      New Category Rules
+ ******************************* */
+validate.newCategoryRules = () => {
+  return [
+    // valid email is required and cannot already exist in the DB
+    body("classification_name")
+      .trim()
+      .escape()
+      .notEmpty()
+      .matches(/^\w+$/)
+      .withMessage("Input must be a single word")
+      .isLength({ min: 2 }),
+  ];
+};
+
+/* ******************************
+ * Check data and return errors or continue to login
+ * ***************************** */
+validate.checkNewCategoryData = async (req, res, next) => {
+  const { classification_name } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    req.flash(
+      "notice",
+      `New Category not submitted.  Invalid Entry  <br>Please correct and resubmit`
+    );
+    res.render("inventory/add-classification", {
+      errors,
+      title: "Add New Classification",
+      nav,
+      classification_name,
+    });
+    return;
+  }
+  next();
+};
+
+/* *******************************************
+ * ADD A NEW ITEM TO INVENTORY - W4 HOMEWORK
+ ******************************************** */
+
+/* ********************************
+ *      New Item to Inventory
+ ******************************* */
+validate.addInventoryRules = () => {
+  return [
+    body("classification_id")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .isNumeric()
+      .withMessage("Select a valid classification"),
+
+    body("inv_make")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 3 })
+      .withMessage("Vehicle Make must be at least 3 characters"),
+
+    body("inv_model")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 3 })
+      .withMessage("Vehicle Make must be at least 3 characters"),
+
+    body("inv_description")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Vehicle description is required"),
+
+    body("inv_image")
+      .trim()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Path to image is required"),
+
+    body("inv_thumbnail")
+      .trim()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Path to thumbnail is required"),
+
+    body("inv_price")
+      .trim()
+      .notEmpty()
+      .isInt({ gt: 0 })
+      .withMessage("Price is required"),
+
+    body("inv_year")
+      .trim()
+      .notEmpty()
+      .custom(async (value) => {
+        const currentYear = new Date().getFullYear();
+        if (value >= 1000 && value <= currentYear) {
+          return true;
+        }
+        throw new Error(
+          `Number must be a 4-digit integer less than or equal to the current year (${currentYear}) and greater than 1700.`
+        );
+      }),
+
+    body("inv_miles")
+      .trim()
+      .notEmpty()
+      .isInt({ min: 0, max: 400000 })
+      .withMessage("Milleage between 0 and 400,000 is required"),
+
+    body("inv_color")
+      .trim()
+      .notEmpty()
+      .isLength({ min: 3 })
+      .withMessage("Color must be at least 3 characters."),
+  ];
+};
+
+/* ******************************
+ * Check data and return errors or continue to login
+ * ***************************** */
+validate.checkAddInventory = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+  } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    req.flash(
+      "notice",
+      `Item not added.  Invalid Entry  <br>Please correct and resubmit`
+    );
+    res.render("inventory/add-inventory", {
+      errors,
+      title: "Add Inventory",
+      nav,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
     });
     return;
   }
