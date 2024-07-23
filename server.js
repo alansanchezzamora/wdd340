@@ -18,6 +18,7 @@ const session = require("express-session");
 const pool = require("./database/");
 const { name } = require("ejs");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 /* *****************************
  *        Middleware
@@ -42,9 +43,15 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Body Parser 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+// Body Parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+//Cookie Parser
+app.use(cookieParser());
+
+//unit 5, Login Process Activity
+app.use(utilities.checkJWTToken);
 
 /* ***********************
  *       Routes

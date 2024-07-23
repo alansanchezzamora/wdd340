@@ -36,11 +36,17 @@ router.post(
   "/login",
   regValidate.loginRules(),
   regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
 );
 
-// Process the login attempt
-router.post("/login", (req, res) => {
-  res.status(200).send("login process");
-});
+/*****************
+ * Deliver Account Managemnt View
+ * Unit 5, JWT Autorization Activity
+ */
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildVehicleManagement)
+);
 
 module.exports = router;

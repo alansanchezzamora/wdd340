@@ -57,4 +57,27 @@ router.post(
   utilities.handleErrors(invController.registerInventory)
 );
 
+/***************************
+ * Get Inventory from AJAX Route
+ ************************** */
+
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+
+/****************
+ * 
+ */
+router.get("/edit/:inventory_id", 
+    utilities.handleErrors(invController.buildEditInventory)
+)
+
+/*********************************
+ * w5 Inventory Update Route
+ */
+router.post("/update/", 
+utilities.handleErrors(invController.updateInventory))
+
 module.exports = router;

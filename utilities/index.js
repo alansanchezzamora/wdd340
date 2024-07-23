@@ -1,6 +1,7 @@
 const invModel = require("../models/inventory-model");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const Util = {};
-
 
 /* ************************
  * Constructs the nav HTML unordered list
@@ -24,8 +25,6 @@ Util.getNav = async function (req, res, next) {
   list += "</ul>";
   return list;
 };
-
-module.exports = Util;
 
 /* **************************************
  * Build the classification view HTML
@@ -85,7 +84,7 @@ Util.buildClassificationGrid = async function (data) {
  * ************************************ */
 Util.buildDetailsCard = async function (data) {
   // Initialize the card variable as an empty string
-  let card = '';
+  let card = "";
 
   // Extract data properties
   const make = data.inv_make;
@@ -102,7 +101,9 @@ Util.buildDetailsCard = async function (data) {
   card += `<h3>Price: $${new Intl.NumberFormat("en-US").format(price)}</h3>`;
   card += `<h3>Description: ${description}</h3>`;
   card += `<h3>Color: ${color}</h3>`;
-  card += `<h3>Miles: ${new Intl.NumberFormat("en-US").format(miles)}</h3></div></div>`;
+  card += `<h3>Miles: ${new Intl.NumberFormat("en-US").format(
+    miles
+  )}</h3></div></div>`;
 
   // Return the constructed card
   return card;
@@ -133,9 +134,46 @@ Util.buildClassificationList = async function (classification_id = null) {
  * General Error Handling
  * Unit 3, Activities
  */
-Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
-//Promise.resolve accepts a function as a parameter 
+Util.handleErrors = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+//Promise.resolve accepts a function as a parameter
 //which is why it is considered a higher order function
 //If there's an error and the promise fails, the catch.() method picks up the error
 // and passes it to the next step in the process.
 // that next step will be the Express Error Handler
+
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          req.flash("notice", "Please log in");
+          res.clearCookie("jwt");
+          return res.redirect("/account/login");
+        }
+        res.locals.accountData = accountData;
+        res.locals.loggedin = 1;
+        next();
+      }
+    );
+  } else {
+    next();
+  }
+};
+
+/********************************
+ * Check Login
+ * Unit 5, jwt authorize activity
+ ********************************* */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next();
+  } else {
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
+  }
+};
+
+module.exports = Util;

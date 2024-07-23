@@ -305,4 +305,108 @@ validate.checkAddInventory = async (req, res, next) => {
   }
   next();
 };
+
+/* ******************************
+ * Check data and return errors or continue to login
+ * ***************************** */
+validate.checkAddInventory = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+  } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    req.flash(
+      "notice",
+      `Item not added.  Invalid Entry  <br>Please correct and resubmit`
+    );
+    res.render("inventory/add-inventory", {
+      errors,
+      title: "Add Inventory",
+      nav,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+    });
+    return;
+  }
+  next();
+};
+
+/* ******************************
+ * Check data for udpating inventory
+ * ******************************/
+validate.checkInventoryUpdateData = async (req, res, next) => {     
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+      const { inv_id, classification_id, inv_year, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body   
+      const nav = await utilities.getNav()
+      const itemName = inv_make + " " + inv_model
+      const classSelect = await utilities.buildClassificationList(classification_id)
+      req.flash("notice", `New Inventory not submitted.  Invalid Entry  <br>Please correct and resubmit`)        
+      res.render("./inventory/edit-inventory", {
+          errors,
+          title: "Edit " + itemName, 
+          nav, 
+          inv_id,
+          classSelect,
+          inv_id,
+          inv_make,
+          inv_model,
+          inv_year,
+          inv_description,
+          inv_image,
+          inv_thumbnail,
+          inv_price,
+          inv_miles,
+          inv_color,
+          classification_id,
+      })
+      return
+  }
+  next()
+}
+
+
+/* ******************************
+ * Check data for posting to DB else return errors.  ERRORS TO BE DIRECTED BACK TOTEH "EDIT" (Modify) VIEW
+ * ******************************/
+validate.checkUpdateData = async (req, res, next) => {     
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {             
+      const { classification_id, inv_year, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, inv_id } = req.body   
+      const nav = await utilities.getNav() 
+      const classSelect = await utilities.buildClassificationList(classification_id)
+      const itemName = `${inv_make} ${inv_model}`               
+      req.flash("notice", `Update to Inventory not submitted.  Invalid Entry  <br>Please correct and resubmit`)
+      res.render("inventory/edit-inventory", {
+          errors,
+          title: "Edit " + itemName,
+          nav,
+          classification_id, inv_year, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, inv_id,
+          classSelect,
+  })
+  return
+  }
+  next()
+}
 module.exports = validate;
