@@ -159,6 +159,8 @@ Util.checkJWTToken = (req, res, next) => {
       }
     );
   } else {
+    res.locals.loggedin = false;
+
     next();
   }
 };
