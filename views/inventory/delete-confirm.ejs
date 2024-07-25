@@ -1,0 +1,37 @@
+<% if (title) { %>
+    <h1 class="title">
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <%- messages() %>
+
+            <p>Confirm Deletion - The delete is permanent.</p>
+
+            <form id="deleteForm" action="/delete" method="POST">
+
+                <label for="inv_make">Make:</label>
+                <input type="text" id="inv_make" name="inv_make" placeholder="Min of 3 characters"
+                    value="<%= locals.inv_make %>" readonly>
+                </label>
+
+                <label for="inv_model">Model:</label>
+                <input type="text" id="inv_model" name="inv_model" placeholder="Min of 3 characters"
+                    value="<%= locals.inv_model %>" readonly>
+                </label>
+
+                <label for="inv_price">Price:</label>
+                <input type="number" id="inv_price" name="inv_price" value="<%= locals.inv_price %>" readonly
+                    placeholder="decimal or integer">
+                </label>
+
+                <label for="inv_year">Year:</label>
+                <input type="text" id="inv_year" name="inv_year" value="<%= locals.inv_year %>"
+                    placeholder="4-digit year" readonly>
+                </label>
+
+                <button type="submit">Delete</button>
+
+                <input type="hidden" name="inv_id" <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+                    <% } %>>
+            </form>

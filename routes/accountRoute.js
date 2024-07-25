@@ -49,4 +49,20 @@ router.get(
   utilities.handleErrors(accountController.buildVehicleManagement)
 );
 
+router.get(
+  "/update/:account_id",
+  utilities.handleErrors(accountController.updateAccountView)
+);
+
+router.post(
+  "/update-account/:account_id",
+  utilities.handleErrors(regValidate.checkUpdateData),
+  utilities.handleErrors(accountController.updateAccount)
+);
+
+router.post(
+  "/update-password/:account_id",
+  utilities.handleErrors(regValidate.checkUpdateData),
+  utilities.handleErrors(accountController.updatePassword)
+);
 module.exports = router;

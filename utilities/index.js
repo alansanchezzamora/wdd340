@@ -176,4 +176,15 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
+/* *****************
+ *  Check Authorization
+ * *************** */
+Util.checkAuthentication = (req, res, next) => {
+  if (res.locals.accountType !== "Admin" && res.locals.accountType !== "Employee") {
+      req.flash("notice",'Not Authorized')
+      return res.redirect("/account/login")
+  }else{
+      next()
+  }
+}
 module.exports = Util;

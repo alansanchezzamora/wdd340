@@ -204,13 +204,10 @@ invCont.getInventoryJSON = async (req, res, next) => {
  *  Build edit inventory view
  * ************************** */
 invCont.buildEditInventory = async function (req, res, next) {
-  //approach is collect all the db info I need, then pass to a utility to build the html needed for the form
-  //take advantage of existing function used for getNav
-  console.log("enter buildEditInventory");
   const nav = await utilities.getNav();
   const inventory_id = req.params.inventory_id;
-  let data = await invModel.getInventoryDetailsById(inventory_id); //get inv details.  same as inventory detail view
-  data = data[0]; //had to do this to get 1st item in the array
+  let data = await invModel.getInventoryDetailsById(inventory_id);
+  data = data[0];
   const inv_id = data.inv_id;
   const inv_make = data.inv_make;
   const inv_model = data.inv_model;
@@ -225,8 +222,8 @@ invCont.buildEditInventory = async function (req, res, next) {
 
   const classificationOptions = await utilities.buildClassificationList(
     classification_id
-  ); //modify to pass in classification_id
-  const itemName = `${data.inv_make} ${data.inv_model}`; //creating a name to pass back for title/h1
+  );
+  const itemName = `${data.inv_make} ${data.inv_model}`;
 
   res.render("./inventory/edit-inventory", {
     title: "Edit " + itemName,
@@ -249,66 +246,55 @@ invCont.buildEditInventory = async function (req, res, next) {
 };
 
 /* ***************************
- *  Update Inventory Data
+ *  Delete Data
  * ************************** */
-invCont.updateInventory = async function (req, res, next) {
+invCont.deleteInventory = async function (req, res, next) {
   let nav = await utilities.getNav();
-  const {
-    inv_id,
-    inv_make,
-    inv_model,
-    inv_description,
-    inv_image,
-    inv_thumbnail,
-    inv_price,
-    inv_year,
-    inv_miles,
-    inv_color,
-    classification_id,
-  } = req.body;
-  const updateResult = await invModel.updateInventory(
-    inv_id,
-    inv_make,
-    inv_model,
-    inv_description,
-    inv_image,
-    inv_thumbnail,
-    inv_price,
-    inv_year,
-    inv_miles,
-    inv_color,
-    classification_id
-  );
+  const inv_id = req.body.inventory_id;
+  const deleteResult = await invModel.deleteInvModel(inv_id);
 
-  if (updateResult) {
-    const itemName = updateResult.inv_make + " " + updateResult.inv_model;
-    req.flash("notice", `The ${itemName} was successfully updated.`);
+  const inv_make = req.body.inv_make;
+  const inv_model = req.body.inv_model;
+  const itemName = inv_make + " " + inv_model;
+
+  //determine if result was recieved
+  if (deleteResult) {
+    req.flash("notice", `${itemName} successfully deleted`);
     res.redirect("/inv/");
   } else {
-    const classificationSelect = await utilities.buildClassificationList(
-      classification_id
-    );
-    const itemName = `${inv_make} ${inv_model}`;
-    req.flash("notice", "Sorry, the insert failed.");
-    res.status(501).render("inventory/edit-inventory", {
-      title: "Edit " + itemName,
+    req.flash("notice", `${itemName} failed to delete.`);
+    res.status(501).redirect(`/delete-confirm/${inv_id}`, {
+      title: "Delete " + itemName + "!",
       nav,
-      classificationSelect: classificationSelect,
       errors: null,
-      inv_id,
-      inv_make,
-      inv_model,
-      inv_year,
-      inv_description,
-      inv_image,
-      inv_thumbnail,
-      inv_price,
-      inv_miles,
-      inv_color,
-      classification_id,
     });
   }
 };
 
+/* **************************
+ * Build Delete Item
+ ***************************/
+invCont.buildDeleteView = async function (req, res, next) {
+  const nav = await utilities.getNav();
+  const inventory_id = parseInt(req.params.inventory_id);
+  let data = await invModel.deleteInventoryItem(inventory_id);
+  data = data[0];
+  const inv_id = data.inv_id;
+  const inv_make = data.inv_make;
+  const inv_model = data.inv_model;
+  const inv_year = data.inv_year;
+  const inv_price = data.inv_price;
+  const itemName = `${data.inv_make} ${data.inv_model}`;
 
+  res.render("./inventory/delete-confirm", {
+    title: "Delete " + itemName,
+    nav,
+    errors: null,
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_price,
+  });
+};
 module.exports = invCont;

@@ -1,0 +1,64 @@
+<% if (title) { %>
+    <h1 class="title">
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <%- messages() %>
+
+            <div>
+                <h2>Change Account Information</h2>
+                <form action="/account/update-account/<%= accountId %>" method="post">
+
+                    <div>
+                        <label for="fname">First Name:
+                            <input type="text" id="fname" name="account_firstname" required
+                                value="<%= locals.account_firstname %>">
+                        </label>
+                    </div>
+
+                    <div>
+                        <label for="lname">Last Name:
+                            <input type="text" id="lname" name="account_lastname" minlength="2" placeholder="" required
+                                value="<%= locals.account_lastname %>">
+                        </label>
+                    </div>
+
+                    <div class="email-input field">
+                        <label for="email">Email:
+                            <input type="email" id="email" name="account_email" placeholder="" required
+                                value="<%= locals.account_email %>">
+                        </label>
+                    </div>
+
+                    <button class="update-button button" type="submit" disabled>Update Account</button>
+
+                    <input type="hidden" name="account_id" <% if(account_id) { %> value="<%= account_id %>"
+                        <% } %>>
+                </form>
+
+                <form action="/account/update-password/<%= accountId %>" method="post">
+                    <p>change your password</p>
+                    <div class="password-input field" id="pwContainer">
+                        <label for="pw_input">Password:
+                            <input type="password" name="account_password" id="pw_input"
+                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+                        </label>
+                        <img id="pwBtn" src="/images/site/show_pass.svg" alt="show/hide password icon">
+                    </div>
+
+                    <button type="submit" disabled>Change Password</button>
+
+                    <input type="hidden" name="account_id" <% if(account_id) { %> value="<%= account_id %>"
+                        <% } %>>
+
+                            <input type="hidden" name="account_firstname" <% if(account_firstname) { %> value="<%=
+                                account_firstname %>"
+                                <% } %>>
+
+                                    <input type="hidden" name="account_lastname" <% if(account_lastname) { %> value="<%=
+                                        account_lastname %>"
+                                        <% } %>>
+
+                </form>
+            </div>
