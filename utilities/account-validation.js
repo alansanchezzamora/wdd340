@@ -409,4 +409,45 @@ validate.checkUpdateData = async (req, res, next) => {
   }
   next()
 }
+
+validate.bugRules = () => {
+  return [
+    body("user_name")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a user name."),
+
+    body("bug_text")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a bug."),
+  ];
+};
+
+/* ******************************
+ * Check data and return errors or continue to registration
+ * ***************************** */
+validate.checkBugData = async (req, res, next) => {
+  const { user_name, bug_text } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("errors/bug", {
+      errors,
+      title: "Report a Bug!",
+      nav,
+      user_name,
+      bug_text,
+    });
+    return;
+  }
+  next();
+};
+
+
 module.exports = validate;

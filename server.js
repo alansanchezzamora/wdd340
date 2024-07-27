@@ -13,6 +13,7 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
+const feedbackRoute = require("./routes/feedbackRoute");
 const utilities = require("./utilities");
 const session = require("express-session");
 const pool = require("./database/");
@@ -71,6 +72,10 @@ app.use("/inv", utilities.handleErrors(inventoryRoute));
 
 //account route
 app.use("/account", utilities.handleErrors(accountRoute));
+
+//feedback route
+app.use("/feedback", utilities.handleErrors(feedbackRoute));
+
 
 // File Not Found Route - must be last route in list
 //Place after all routes
